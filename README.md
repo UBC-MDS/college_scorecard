@@ -1,6 +1,10 @@
-## Discovering how ethnicity impacts higher education and beyond. 
+## Beyond education!
+### Helping students choose their future!
 
-Authors: Socorro Dominguez (sedv8808), Sarah Watts (smwatts)
+Authors: 
+[Sarah Watts](https://github.com/smwatts)
+[Socorro Dominguez](https://github.com/sedv8808)
+
 
 ### Milestone 1
 
@@ -8,7 +12,11 @@ Authors: Socorro Dominguez (sedv8808), Sarah Watts (smwatts)
 
 Many people value higher education for an unlimited number of reasons: Some link it to becoming able to solve problems, others to learning how to work with different kinds of people, and some others think it will teach them how to handle real life tasks. It has also been considered an asset to have in order to pursue a more lucrative career with a better salary. These monetary benefits might allow a person to increase their living condition or to step out of poverty. 
 
-There are different kinds of postsecondary institution throughout the United States that offer a wide range of programs. However, some people might face more challenges than others in order to enter higher education. To understand these challenges, and to see if there are groups or minorities that tend to be more marginalized, we are proposing to build an app that can help us track which social groups tend to be more hindered when entering a postsecondary institution. This could either be because of race, gender, or average income level. We would also like to see how entering a specific postsecondary institution benefits an individual overall in their future life.
+However, how do we choose which school will provide us with the tools that we need for the future? 
+
+Thousands of students in the United States ask themselves this question every year. And they should be aware that there are different kinds of postsecondary institution throughout the country that offer a wide range of programs. 
+
+Choosing the right institution is just as important as choosing the right career. Not all students start off on the same foot. Some students might require more financial aid than others depending on their families' income. Some others might be interested in the demographics of the school: what is the age of most of their to be classmates or how many females access these programs. Most students would likely be interested into looking at what their future incomes might look like if partaking into these cohorts. 
 
 The College Scorecard Project gives us information to compare how well postsecondary institutions prepare their students in order to be successful. We can compare the cost of education and how many graduates are working even several years after entry in the institution. 
 
@@ -39,21 +47,33 @@ The data available from this website covers a wide range of topics. The followin
   o	Average and Median Earnings, Disaggregated by Student Subgroups
   o	Share of Former Students Earning Over $25,000
 
-(Missing dataset, it should be uploaded on the Github repository, but it is still missing, hence, I do not know how many observations there are.)
-
 https://collegescorecard.ed.gov/assets/FullDataDocumentation.pdf
 
+A prototype script has been written by Sarah Watts and is included in this repository. This script loads the data and keeps the following variables:
 
+- STABBR: Code of State
+- loan_ever: Percentage of students with a loan
+- female: Percentage of female students
+- age_entry: Age at which students start school
+- md_faminc: Medium family income
+- md_earn_wne_p10: Medium wage 10 years after entry
+
+The data that we are keeping will change as the app is being developed. 
 #### Usage scenario & tasks / question to explore
 
-Mary is a policy maker in the Ministry of Education in the United States. She understands that getting into higher education is crucial for a wide range of young nationals in order to step out of poverty or improve their current living situation. She has empirically identified that some groups tend to be more marginalized than others and she would want to change this. She thinks that reducing costs is important. But in order to force the government to provide with more aid to possible students, she wants to prove the positive outcomes of people who have had access to higher education as a mean to improve their living situation. 
+Scenario I:
+Sage is a councelour who helps high school students pursue higher education in several states. From personal experience, Sage knows that it is not always possible to pursue higher education at all institutions as some are not affordable for everyone. Sages tries to help students assess their possibile choices: they should consider mostly based on their location, families' current income and if there is any financial aid or loans available. Sage would also like to provide an estimate of the expected income a student would have 10 years after entering the school. This would motivate a lot of them to purusue education even if that means to ask for a loan. 
+Sage knows some students might feel scared of going back to school as they age or if they are married. Hence, an app that informs of the average entry age or marital status would also be helpful as a lot of students would realize that many people take a break between high school and higher education or go back even after marriage. Sage really believes into convincing everyone to pursue a higher education to help them achieve their dreams and improve their current financial situation - regardless of what it currently looks like.
 
-To understand and improve higher education opportunities for disadvantaged students, she needs to measure the enrollment of these groups at the different institutions and how well they currently are doing. She wants to measure by: ethnicity, gender and students within the poverty rate. 
+Scenario II:
+Mary is a policy maker in the Ministry of Education in the United States. She understands that getting into higher education is crucial for a wide range of young nationals in order to step out of poverty or improve their current living situation. She has empirically identified that females tend to be more marginalized than others and she would want to change this. She would want to show to different financial institutions that providing financial aid to females to help them pursue higher education helps them step out of poverty. She would use our app to shows what a female's family income currently looks like and how her income improves x number of years after entering college/university. That way, she would look to convince banks and schools to offer more loans, incentives, and help to females who want to purusue higher education. If successful, Mary would want to take this initiative forward to create financial aid directed to veterans or people belonging to different racial groups. 
 
 
 #### Description of your app & sketch
 
-The app contains a landing page that shows the average or count of our dataset factors (number of students, financial aid, average family income, post education income) broken down by ethnic group (white, black, asian, hispanic) in the US in bar charts. From a dropdown list, users are able to filter based on state, school and year. Users can also hover over bars in the bar charts to get the exact values for each ethnic group.
+The app contains a landing page that shows the average or count of our dataset factors (financial aid, average family income, post education income) broken down by gender and ethnic groups (white, black, asian, hispanic) in the US in bar charts. 
+
+From a dropdown list, users are able to filter based on state, school, and family income (identify poverty rate). 
 
 An example sketch is shown below: 
 ![Alt text](/milestone_1/sketch_of_college_scorecard.png?raw=true "App sketch")
