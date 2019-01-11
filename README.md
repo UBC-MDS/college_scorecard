@@ -76,4 +76,4 @@ The app contains a landing page that shows the average or count of our dataset f
 From a dropdown list, users are able to filter based on state, school, and family income (identify poverty rate). 
 
 An example sketch is shown below: 
-![Alt text](/milestone_1/sketch_of_college_scorecard.png?raw=true "App sketch")
+![Alt text](images/sketch_of_college_scorecard.png?raw=true "App sketch")
