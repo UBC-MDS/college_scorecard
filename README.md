@@ -47,6 +47,7 @@ The data available from the College Scorecard Project covers a wide range of top
   o	Share of Former Students Earning Over $25,000
 
 A complete description of the dataset can be found here: [https://collegescorecard.ed.gov/assets/FullDataDocumentation.pdf](https://collegescorecard.ed.gov/assets/FullDataDocumentation.pdf). This dataset provides access to information for 8,000 schools and 2,000 features.
+
 ----------------------------
 
 To begin understanding the impact of school size on different features, we have created a data cleaning script. The data cleaning script can be found in [src/01_load_and_clean_data.R](src/01_load_and_clean_data.R). This script loads the data and keeps the following variables:
