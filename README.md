@@ -14,7 +14,7 @@ However, we know that not all post-secondary institutions are created equal. Man
 
 Using the data collected in the College Scorecard Project, we want to visually explore how the size of a school impacts students. We will create an app that will be used to show the distribution of factors students care about (financial aid, earning potential etc.), broken down by the size of a school. We will also allow users to explore different aspects of this data by filtering and re-ordering on different variables such as their state or admission rate that can contribute to the performance of a school size for each factor.
 
-Our definition of school size is as follows (in terms of undergraduate students);
+Our definition of school size is as follows (in terms of undergraduate students);    
 Large school: 15,000 +   
 Medium school: 5,000-15,000   
 Small school: 0-5,000   
