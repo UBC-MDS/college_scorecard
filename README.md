@@ -1,7 +1,7 @@
 ## Impact of School Size on Higher Education
 
 Authors: 
-[Sarah Watts](https://github.com/smwatts)
+[Sarah Watts](https://github.com/smwatts)   
 [Socorro Dominguez](https://github.com/sedv8808)
 
 ### Milestone 1
