@@ -37,7 +37,7 @@ school_size_plot <- function(data){
     ylab("Count") +
     theme(panel.background = element_blank(), panel.grid.major = element_blank(),
           panel.grid.minor = element_blank())
-  ggsave(file = "images/01_num_schools_by_size.png", plot = plot, width = 4, height = 3, dpi = 120)
+  return(plot)
 }
 
 female_dis_plot <- function(data){
@@ -50,59 +50,63 @@ female_dis_plot <- function(data){
     theme(panel.background = element_blank(), panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
     guides(fill = guide_legend(title = "School Size"))
-  ggsave(file = "images/02_per_females.png", plot = plot, width = 4, height = 3, dpi = 120)
+  return(plot)
 }
 
 median_10yr_earn <- function(data){
   filter_data <- data %>% filter(!is.na(md_earn_wne_p10))
   plot <- filter_data %>% ggplot(aes(x=md_earn_wne_p10, fill=SCHOOL_SIZE)) + geom_density(alpha=.3) +
     theme_bw() + 
+    theme(legend.position="none") +
     ggtitle("Median Earnings 10yrs after Graduation") +
     xlab("Earnings ($)") +
     ylab("Frequency") +
     theme(panel.background = element_blank(), panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
     guides(fill = guide_legend(title = "School Size"))
-  ggsave(file = "images/03_median_10yr_earn.png", plot = plot, width = 4, height = 3, dpi = 120)
+  return(plot)
 }
 
 entry_age_plot <- function(data){
   filter_data <- data %>% filter(!is.na(age_entry))
   plot <- filter_data %>% ggplot(aes(x=age_entry, fill=SCHOOL_SIZE)) + geom_density(alpha=.3) +
     theme_bw() + 
+    theme(legend.position="none") +
     ggtitle("Entrance Age") +
     xlab("Age") +
     ylab("Frequency") +
     theme(panel.background = element_blank(), panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
     guides(fill = guide_legend(title = "School Size"))
-  ggsave(file = "images/04_entrance_age.png", plot = plot, width = 4, height = 3, dpi = 120)
+  return(plot)
 }
 
 perc_fed_loans <- function(data){
   filter_data <- data %>% filter(!is.na(loan_ever))
   plot <- filter_data %>% ggplot(aes(x=loan_ever, fill=SCHOOL_SIZE)) + geom_density(alpha=.3) +
     theme_bw() + 
+    theme(legend.position="none") +
     ggtitle("Students Receiving Financial Aid (%)") +
     xlab("Financial aid (%)") +
     ylab("Frequency") +
     theme(panel.background = element_blank(), panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
     guides(fill = guide_legend(title = "School Size"))
-  ggsave(file = "images/05_perc_fed_loans.png", plot = plot, width = 4, height = 3, dpi = 120)
+  return(plot)
 }
 
 med_fam_earn <- function(data){
   filter_data <- data %>% filter(!is.na(md_faminc))
   plot <- filter_data %>% ggplot(aes(x=md_faminc, fill=SCHOOL_SIZE)) + geom_density(alpha=.3) +
     theme_bw() + 
+    theme(legend.position="none") +
     ggtitle("Median Family Earnings") +
     xlab("Family earnings ($)") +
     ylab("Frequency") +
     theme(panel.background = element_blank(), panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
     guides(fill = guide_legend(title = "School Size"))
-  ggsave(file = "images/06_med_fam_earn.png", plot = plot, width = 4, height = 3, dpi = 120)
+  return(plot)
 }
 
 main()
