@@ -24,7 +24,7 @@ ui <- fluidPage(
   
   sidebarLayout(
     sidebarPanel(
-      selectInput("State1Input", label = h3("City 1"), 
+      selectInput("State1Input", label = h3("State"), 
                   choices = states, 
                   selected = 1),
     
@@ -37,9 +37,9 @@ ui <- fluidPage(
   mainPanel(
     tabsetPanel(
       tabPanel("Total", plotOutput("row_1"), plotOutput("row_2"), plotOutput("row_3")),
-      tabPanel("Small Schools", plotOutput("row_1"), plotOutput("row_2"), plotOutput("row_3")),
-      tabPanel("Medium Schools", plotOutput("row_1"), plotOutput("row_2"), plotOutput("row_3")),
-      tabPanel("Large Schools", plotOutput("row_1"), plotOutput("row_2"), plotOutput("row_3"))
+      tabPanel("Small Schools", plotOutput(""), plotOutput(""), plotOutput("")),
+      tabPanel("Medium Schools", plotOutput(""), plotOutput(""), plotOutput("")),
+      tabPanel("Large Schools", plotOutput(""), plotOutput(""), plotOutput(""))
       )
   )
   )
