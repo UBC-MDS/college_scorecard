@@ -13,18 +13,37 @@ library(gridExtra)
 library(cowplot)
 
 data <- read_csv("../data/02_scorecard_clean.csv")
-
+states <- as.list(unique(data$STABBR))
+adm_rate <- as.numeric(data$ADM_Rate_P)
+sch_size <- as.list(unique(data$SCHOOL_SIZE))
 
 ui <- fluidPage(
+  
   titlePanel("Impact of School Size on Higher Education (US)"
+             ),
+  
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("State1Input", label = h3("City 1"), 
+                  choices = states, 
+                  selected = 1),
+    
+      sliderInput("adm_rate", label = h3("Admission Rate"), step = 5,
+                min = 0.0, max = 100.0, value = c(0,100),
+                sep = ""
+                )
     ),
-  fluidPage(
-    plotOutput("row_1"),
-    plotOutput("row_2"),
-    plotOutput("row_3")
+    
+  mainPanel(
+    tabsetPanel(
+      tabPanel("Total", plotOutput("row_1"), plotOutput("row_2"), plotOutput("row_3")),
+      tabPanel("Small Schools", plotOutput("row_1"), plotOutput("row_2"), plotOutput("row_3")),
+      tabPanel("Medium Schools", plotOutput("row_1"), plotOutput("row_2"), plotOutput("row_3")),
+      tabPanel("Large Schools", plotOutput("row_1"), plotOutput("row_2"), plotOutput("row_3"))
+      )
+  )
   )
 )
-
 
 server <- function(input, output) {
   data_filt <- data
