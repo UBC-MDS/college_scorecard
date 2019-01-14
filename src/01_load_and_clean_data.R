@@ -50,6 +50,7 @@ main <- function(){
                 filter(UGDS != "NULL") %>% 
                 mutate(ADM_RATE_CLEAN = str_replace_all(ADM_RATE, "NULL", NA_character_)) %>%
                 transform(ADM_RATE = as.numeric(ADM_RATE_CLEAN), UGDS = as.numeric(UGDS)) %>%
+                mutate(ADM_Rate_P = ADM_RATE*100)%>%
                 select(-ADM_RATE_CLEAN) %>%
                 mutate(SCHOOL_SIZE = ifelse(UGDS < 5000, "Small",
                                           ifelse(UGDS < 15000, "Medium", "Large")))
