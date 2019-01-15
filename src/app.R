@@ -27,12 +27,12 @@ ui <- fluidPage(
     sidebarPanel(
       selectInput("stateInput", label = h3("State"), 
                   choices = states, 
-                  selected = 1),
+                  selected = "AK")#,
     
-      sliderInput("adm_rate", label = h3("Admission Rate"), step = 5,
-                min = 0.0, max = 100.0, value = c(0,100),
-                sep = ""
-                )
+      #sliderInput("admRateInput", label = h3("Admission Rate"), step = 5,
+       #         min = 0.0, max = 100.0, value = c(0,100),
+        #        sep = ""
+         #       )
     ),
     
   mainPanel(
@@ -47,15 +47,26 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
+  
+  observe(print(input$stateInput))
+  
   # Filter dataset (on state & admission rate)
 
   
   # if State1Input == '(all)' -> no filtering, o/w filter
   # if adm_rate[0] == 0 and adm_rate[1] == 100 -> no filtering, o/w filter
+  
+  
+  #This is the part I am having troubles with. Thanks Sarah!!
+  data_filt_test <- reactive(
+    data %>%
+      filter(STABBR == input$stateInput[1])
+  )
+  
   data_filt <- data
   
   # Total
-  school_size_plot <- school_size_plot(data_filt)
+  school_size_plot <- school_size_plot(data_filt_test)
   female_dis_plot <- female_dis_plot(data_filt)
   median_10yr_earn <- median_10yr_earn(data_filt)  
   entry_age_plot <- entry_age_plot(data_filt)
