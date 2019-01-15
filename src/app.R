@@ -39,7 +39,7 @@ ui <- fluidPage(
     tabsetPanel(
       tabPanel("Total", plotOutput("row_1"), plotOutput("row_2"), plotOutput("row_3")),
       tabPanel("Small Schools", plotOutput("row_4"), plotOutput("row_5"), plotOutput("row_6")),
-      tabPanel("Medium Schools", plotOutput(""), plotOutput(""), plotOutput("")),
+      tabPanel("Medium Schools", plotOutput("row_7"), plotOutput("row_8"), plotOutput("row_9")),
       tabPanel("Large Schools", plotOutput(""), plotOutput(""), plotOutput(""))
       )
   )
@@ -60,14 +60,13 @@ server <- function(input, output) {
   med_fam_earn <- med_fam_earn(data_filt)
   legend <- get_legend(female_dis_plot)
   
-  
-  
+
   # Filter for data = small
-  # Call graphing functions for data subset
   data_filt_small <-
     data %>%
     filter(SCHOOL_SIZE == "Small")
-  #Graphs for data small
+  
+  # Call graphing functions for data subset
   school_size_plot_small <- school_size_plot(data_filt_small)
   female_dis_plot_small <- female_dis_plot(data_filt_small)
   median_10yr_earn_small <- median_10yr_earn(data_filt_small)  
@@ -77,7 +76,18 @@ server <- function(input, output) {
   legend_small <- get_legend(female_dis_plot_small)  
   
   # Filter for data = Medium
+  data_filt_med <-
+    data %>%
+    filter(SCHOOL_SIZE == "Medium")
+  
   # Call graphing functions for data subset
+  school_size_plot_med <- school_size_plot(data_filt_med)
+  female_dis_plot_med <- female_dis_plot(data_filt_med)
+  median_10yr_earn_med <- median_10yr_earn(data_filt_med)  
+  entry_age_plot_med <- entry_age_plot(data_filt_med)
+  perc_fed_loans_med <- perc_fed_loans(data_filt_med)
+  med_fam_earn_med <- med_fam_earn(data_filt_med)
+  legend_med <- get_legend(female_dis_plot_med)  
   
   # Filter for data = Large
   # Call graphing functions for data subset
@@ -129,9 +139,31 @@ server <- function(input, output) {
                  widths=c(5.3, 5.3, 0.8))
   )  
   
-  
-  
   # Create output for "medium" graphs
+  female_dis_plot_med <- female_dis_plot_med + theme(legend.position="none")
+  
+  output$row_7 = renderPlot(
+    grid.arrange(median_10yr_earn_med,
+                 legend,
+                 ncol=3, nrow=1, 
+                 widths=c(5.3, 5.3, 0.8))
+  )
+  output$row_8 = renderPlot(
+    grid.arrange(entry_age_plot_med,
+                 female_dis_plot_med,
+                 legend,
+                 ncol=3, nrow=1, 
+                 widths=c(5.3, 5.3, 0.8))
+  )
+  output$row_9 = renderPlot(
+    grid.arrange(perc_fed_loans_med,
+                 med_fam_earn_med,
+                 legend,
+                 ncol=3, nrow=1, 
+                 widths=c(5.3, 5.3, 0.8))
+  )  
+  
+  
   # Create output for "large" graphs
 }
 
