@@ -1,182 +1,207 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-
 library(shiny)
 library(tidyverse)
 library(gridExtra)
 library(cowplot)
 
-data <- read_csv("../data/02_scorecard_clean.csv")
-# append and "(all)" option to the list and set as default
-states <- as.list(unique(data$STABBR))
-adm_rate <- as.numeric(data$ADM_Rate_P)
-sch_size <- as.list(unique(data$SCHOOL_SIZE))
+data <- read.csv("../data/02_scorecard_clean.csv", stringsAsFactors = FALSE)
+tmp <- sort(unique(data$STABBR))
+tmp <- append(tmp, '(all)')
+states <- sort(tmp)
+
 
 ui <- fluidPage(
-  
-  titlePanel("Impact of School Size on Higher Education (US)"
-             ),
-  
+  titlePanel("Impact of School Size on Higher Education (US)", 
+             windowTitle = "scorecard app"),
   sidebarLayout(
     sidebarPanel(
-      selectInput("State1Input", label = h3("State"), 
-                  choices = states, 
-                  selected = 1),
-    
-      sliderInput("adm_rate", label = h3("Admission Rate"), step = 5,
-                min = 0.0, max = 100.0, value = c(0,100),
-                sep = ""
-                )
+      selectInput("typeInput", "Select a state of interest", 
+                  choices = states,
+                  selected = '(all)'),
+      sliderInput("priceInput", "Select an admission rate range",
+                  min = 0, max = 100, value = c(0, 100), post="%")
+      
     ),
-    
-  mainPanel(
-    tabsetPanel(
-      tabPanel("Total", plotOutput("row_1"), plotOutput("row_2"), plotOutput("row_3")),
-      tabPanel("Small Schools", plotOutput(""), plotOutput(""), plotOutput("")),
-      tabPanel("Medium Schools", plotOutput(""), plotOutput(""), plotOutput("")),
-      tabPanel("Large Schools", plotOutput(""), plotOutput(""), plotOutput(""))
-      )
-  )
+    mainPanel(
+      # plotOutput("school_plot"))
+      tabsetPanel( id = 'tabs', selected = 'Total',
+                   tabPanel("Total", value = 'Total', plotOutput("school_plot_1")),
+                   tabPanel("Small", value = 'Small', plotOutput("school_plot_2")),
+                   tabPanel("Medium",value = 'Medium', plotOutput("school_plot_3")),
+                   tabPanel("Large", value = 'Large', plotOutput("school_plot_4")))
+    )
   )
 )
 
 server <- function(input, output) {
-  # Filter dataset (on state & admission rate)
-  # if State1Input == '(all)' -> no filtering, o/w filter
-  # if adm_rate[0] == 0 and adm_rate[1] == 100 -> no filtering, o/w filter
-  data_filt <- data
-  # Total
-  school_size_plot <- school_size_plot(data_filt)
-  female_dis_plot <- female_dis_plot(data_filt)
-  median_10yr_earn <- median_10yr_earn(data_filt)  
-  entry_age_plot <- entry_age_plot(data_filt)
-  perc_fed_loans <- perc_fed_loans(data_filt)
-  med_fam_earn <- med_fam_earn(data_filt)
-  legend <- get_legend(female_dis_plot)
-  # Filter for data = small
-  # Call graphing functions for data subset
+  school_size <- reactive(input$tabs)
+  fill_cols <- reactive({
+    if (school_size() == 'Total'){
+      fill_cols = c("green", "blue", "red")
+    }
+    else if (school_size() == 'Small'){
+      fill_cols = c("red")
+    }
+    else if (school_size() == 'Medium'){
+      fill_cols = c("blue")
+    }
+    else {
+      fill_cols = c("green")
+    }
+  })
   
-  # Filter for data = Medium
-  # Call graphing functions for data subset
+  # may need to change this filtering
+  data_filtered <- reactive({
+    if (input$typeInput != '(all)') {
+      if (school_size() != 'Total') {
+        data %>% 
+          filter(ADM_Rate_P < input$priceInput[2],
+                 ADM_Rate_P > input$priceInput[1],
+                 STABBR == input$typeInput,
+                 SCHOOL_SIZE == school_size())
+      }
+      else {
+        data %>% 
+          filter(ADM_Rate_P < input$priceInput[2],
+                 ADM_Rate_P > input$priceInput[1],
+                 STABBR == input$typeInput)        
+      }
+    }
+    else {
+      if (school_size() != 'Total') {
+        data %>% 
+          filter(ADM_Rate_P < input$priceInput[2],
+                 ADM_Rate_P > input$priceInput[1],
+                 SCHOOL_SIZE == school_size())
+      }
+      else {
+        data %>% 
+          filter(ADM_Rate_P < input$priceInput[2],
+                 ADM_Rate_P > input$priceInput[1])        
+      }
+    }
+  })
   
-  # Filter for data = Large
-  # Call graphing functions for data subset
+  # Repeat for each graph
+  school_plot <- reactive({
+    data_filtered() %>% group_by(SCHOOL_SIZE) %>% summarise(count = n()) %>% 
+      arrange(count, desc(count)) %>% 
+      ggplot(aes(x=SCHOOL_SIZE, y=count, fill=SCHOOL_SIZE)) +
+      geom_bar(colour="black", stat="identity", alpha=.3) +
+      theme_bw() +
+      scale_fill_manual(values=fill_cols()) +
+      ggtitle("Number of Schools by Size") +
+      xlab("School Size") + 
+      ylab("Count") +
+      theme(panel.background = element_blank(), panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank())
+  })
   
-  # Total graph output
-  female_dis_plot <- female_dis_plot + theme(legend.position="none")
-  output$row_1 = renderPlot(
-    grid.arrange(school_size_plot, 
-                 median_10yr_earn,
-                 legend,
-                 ncol=3, nrow=1, 
-                 widths=c(5.3, 5.3, 0.8))
-  )
-  output$row_2 = renderPlot(
-    grid.arrange(entry_age_plot,
-                 female_dis_plot,
-                 legend,
-                 ncol=3, nrow=1, 
-                 widths=c(5.3, 5.3, 0.8))
-  )
-  output$row_3 = renderPlot(
-    grid.arrange(perc_fed_loans,
-                 med_fam_earn,
-                 legend,
-                 ncol=3, nrow=1, 
-                 widths=c(5.3, 5.3, 0.8))
-  )
-  # Create output for "small" graphs
-  # Create output for "medium" graphs
-  # Create output for "large" graphs
+  ##Female dis plot
+  
+  female_dis_plot <- reactive({
+    data_filtered() %>% filter(!is.na(female)) %>% group_by(SCHOOL_SIZE) %>%  
+      ggplot(aes((x=female), fill=SCHOOL_SIZE)) +
+      geom_density(alpha=.3) +
+      scale_fill_manual(values=fill_cols()) +
+      theme_bw() +
+      ggtitle("Percentage of Female Students") +
+      xlab("Female students (%)") + 
+      ylab("Frequency") +
+      theme(panel.background = element_blank(), panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank()) +
+      guides(fill = guide_legend(title = "School Size"))
+  })
+  
+  
+  # Median Wage after 10 Years
+  
+  median_10yr_earn <- reactive({
+    data_filtered() %>% filter(!is.na(md_earn_wne_p10)) %>% group_by(SCHOOL_SIZE) %>% 
+      ggplot(aes(x=md_earn_wne_p10, fill=SCHOOL_SIZE)) + 
+      geom_density(alpha=.3) +
+      theme_bw() + 
+      scale_fill_manual(values=fill_cols()) +
+      ggtitle("Median Earnings 10yrs after Graduation") +
+      xlab("Earnings ($)") +
+      ylab("Frequency") +
+      theme(panel.background = element_blank(), panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank()) +
+      guides(fill = guide_legend(title = "School Size"))
+  })
+  
+  
+  # Entry Age Plot
+  entry_age_plot <- reactive({
+    data_filtered() %>% filter(!is.na(age_entry)) %>% group_by(SCHOOL_SIZE) %>%
+      ggplot(aes(x=age_entry, fill=SCHOOL_SIZE)) + geom_density(alpha=.3) +
+      theme_bw() + 
+      scale_fill_manual(values=fill_cols()) +
+      theme(legend.position="none") +
+      ggtitle("Entrance Age") +
+      xlab("Age") +
+      ylab("Frequency") +
+      theme(panel.background = element_blank(), panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank()) +
+      guides(fill = guide_legend(title = "School Size"))
+  })
+  
+  # Perceived Fed Loans
+  perc_fed_loans <- reactive({
+    data_filtered() %>% filter(!is.na(loan_ever)) %>% group_by(SCHOOL_SIZE) %>%
+      ggplot(aes(x=loan_ever, fill=SCHOOL_SIZE)) + geom_density(alpha=.3) +
+      theme_bw() + 
+      scale_fill_manual(values=fill_cols()) +
+      theme(legend.position="none") +
+      ggtitle("Students Receiving Financial Aid (%)") +
+      xlab("Financial aid (%)") +
+      ylab("Frequency") +
+      theme(panel.background = element_blank(), panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank()) +
+      guides(fill = guide_legend(title = "School Size"))
+  })
+  
+  # Med family income 
+  
+  med_fam_earn <- reactive({
+    data_filtered() %>% filter(!is.na(md_faminc)) %>% group_by(SCHOOL_SIZE) %>%
+      ggplot(aes(x=md_faminc, fill=SCHOOL_SIZE)) + geom_density(alpha=.3) +
+      theme_bw() + 
+      scale_fill_manual(values=fill_cols()) +
+      theme(legend.position="none") +
+      ggtitle("Median Family Earnings") +
+      xlab("Family earnings ($)") +
+      ylab("Frequency") +
+      theme(panel.background = element_blank(), panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank()) +
+      guides(fill = guide_legend(title = "School Size"))
+    
+  })
+  
+  output$school_plot_1 <- output$school_plot_2 <- output$school_plot_3 <- output$school_plot_4 <- renderPlot({
+    if (school_size() != 'Total') {
+      grid.arrange(female_dis_plot() + theme(legend.position="none"),
+                   median_10yr_earn()+ theme(legend.position="none"),
+                   entry_age_plot() + theme(legend.position="none"),
+                   perc_fed_loans() + theme(legend.position="none"),
+                   med_fam_earn() + theme(legend.position="none"),
+                   ncol=2, nrow=3, 
+                   widths=c(10, 10))
+    }
+    else {
+      grid.arrange(get_legend(school_plot() + guides(fill = guide_legend(title = "School Size"))),
+                   school_plot() + theme(legend.position="none"),
+                   female_dis_plot() + theme(legend.position="none"),
+                   median_10yr_earn() + theme(legend.position="none"),
+                   entry_age_plot() + theme(legend.position="none"),
+                   perc_fed_loans() + theme(legend.position="none"),
+                   med_fam_earn() + theme(legend.position="none"),
+                   ncol = 2,
+                   widths=c(10,10),
+                   heights=c(15,15,15,15))
+    }
+    
+  })
 }
 
-school_size_plot <- function(data){
-  count_schools <- data %>% group_by(SCHOOL_SIZE) %>% summarise(count = n()) %>% arrange(count, desc(count))
-  plot <- count_schools %>% ggplot(aes(x=SCHOOL_SIZE, y=count, fill=SCHOOL_SIZE)) +
-    geom_bar(colour="black", stat="identity", alpha=.3) +
-    theme_bw() +
-    theme(legend.position="none") +
-    ggtitle("Number of Schools by Size") +
-    xlab("School Size") + 
-    ylab("Count") +
-    theme(panel.background = element_blank(), panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank())
-  return(plot)
-}
-
-female_dis_plot <- function(data){
-  filter_data <- data %>% filter(!is.na(female))
-  plot <- filter_data %>% ggplot(aes(x=female, fill=SCHOOL_SIZE)) + geom_density(alpha=.3) +
-    theme_bw() + 
-    ggtitle("Percentage of Female Students") +
-    xlab("Female students (%)") +
-    ylab("Frequency") +
-    theme(panel.background = element_blank(), panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank()) +
-    guides(fill = guide_legend(title = "School Size"))
-  return(plot)
-}
-
-median_10yr_earn <- function(data){
-  filter_data <- data %>% filter(!is.na(md_earn_wne_p10))
-  plot <- filter_data %>% ggplot(aes(x=md_earn_wne_p10, fill=SCHOOL_SIZE)) + geom_density(alpha=.3) +
-    theme_bw() + 
-    theme(legend.position="none") +
-    ggtitle("Median Earnings 10yrs after Graduation") +
-    xlab("Earnings ($)") +
-    ylab("Frequency") +
-    theme(panel.background = element_blank(), panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank()) +
-    guides(fill = guide_legend(title = "School Size"))
-  return(plot)
-}
-
-entry_age_plot <- function(data){
-  filter_data <- data %>% filter(!is.na(age_entry))
-  plot <- filter_data %>% ggplot(aes(x=age_entry, fill=SCHOOL_SIZE)) + geom_density(alpha=.3) +
-    theme_bw() + 
-    theme(legend.position="none") +
-    ggtitle("Entrance Age") +
-    xlab("Age") +
-    ylab("Frequency") +
-    theme(panel.background = element_blank(), panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank()) +
-    guides(fill = guide_legend(title = "School Size"))
-  return(plot)
-}
-
-perc_fed_loans <- function(data){
-  filter_data <- data %>% filter(!is.na(loan_ever))
-  plot <- filter_data %>% ggplot(aes(x=loan_ever, fill=SCHOOL_SIZE)) + geom_density(alpha=.3) +
-    theme_bw() + 
-    theme(legend.position="none") +
-    ggtitle("Students Receiving Financial Aid (%)") +
-    xlab("Financial aid (%)") +
-    ylab("Frequency") +
-    theme(panel.background = element_blank(), panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank()) +
-    guides(fill = guide_legend(title = "School Size"))
-  return(plot)
-}
-
-med_fam_earn <- function(data){
-  filter_data <- data %>% filter(!is.na(md_faminc))
-  plot <- filter_data %>% ggplot(aes(x=md_faminc, fill=SCHOOL_SIZE)) + geom_density(alpha=.3) +
-    theme_bw() + 
-    theme(legend.position="none") +
-    ggtitle("Median Family Earnings") +
-    xlab("Family earnings ($)") +
-    ylab("Frequency") +
-    theme(panel.background = element_blank(), panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank()) +
-    guides(fill = guide_legend(title = "School Size"))
-  return(plot)
-}
 
 shinyApp(ui = ui, server = server)
