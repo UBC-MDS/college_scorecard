@@ -179,17 +179,25 @@ server <- function(input, output) {
   
   output$school_plot_1 <- output$school_plot_2 <- output$school_plot_3 <- output$school_plot_4 <- renderPlot({
     if (school_size() != 'Total') {
-      grid.arrange(school_plot() + theme(legend.position="none"), 
-                   school_plot() + theme(legend.position="none"),
-                   ncol=2, nrow=1, 
-                   widths=c(7, 7))
+      grid.arrange(female_dis_plot() + theme(legend.position="none"),
+                   median_10yr_earn()+ theme(legend.position="none"),
+                   entry_age_plot() + theme(legend.position="none"),
+                   perc_fed_loans() + theme(legend.position="none"),
+                   med_fam_earn() + theme(legend.position="none"),
+                   ncol=2, nrow=3, 
+                   widths=c(10, 10))
     }
     else {
       grid.arrange(get_legend(school_plot() + guides(fill = guide_legend(title = "School Size"))),
-                   school_plot() + theme(legend.position="none"), 
                    school_plot() + theme(legend.position="none"),
-                   ncol=3, nrow=1, 
-                   widths=c(1, 5, 5))
+                   female_dis_plot() + theme(legend.position="none"),
+                   median_10yr_earn() + theme(legend.position="none"),
+                   entry_age_plot() + theme(legend.position="none"),
+                   perc_fed_loans() + theme(legend.position="none"),
+                   med_fam_earn() + theme(legend.position="none"),
+                   ncol = 2,
+                   widths=c(10,10),
+                   heights=c(15,15,15,15))
     }
     
   })
