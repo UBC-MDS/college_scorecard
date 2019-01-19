@@ -58,7 +58,7 @@ It was important for us to divide in school sizes because usually smaller school
 
 We are also aware that some students might not be willing to relocate, or would just want to relocate to a particular state, so being able to filter by state was also important. 
 
-As in for admission rate, some schools are just harder to get into. And some students might aspire to get into those schools. So, they might just be interested in pursuing education there.
+As for admission rate, some schools are just harder to get into. And some students might aspire to get into those schools. So, they might just be interested in pursuing education there.
 
 
 #### Tasks
