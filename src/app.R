@@ -1,3 +1,20 @@
+# app.R
+# Author: Sarah Watts & Socorro Dominguez
+# Date: January 2019
+#
+# This ShinyApp uses the cleaned data found in the 02_scorecard_clean.csv data file 
+# And creates the app that shows the following plots:
+#    1. A bar plot showing a count of schools by size
+#    2. A density plot showing the distribution of female % of attendees by size of a school
+#    3. A density plot showing the distribution of median earnings 10yrs after attendence by size of a school
+#    4. A density plot showing the distribution of entry age by size of a school
+#    5. A density plot showing the distribution of the % of loans recieved by size of a school
+#    6. A density plot showing the distribution of the family income by size of a school
+
+# This app also allows interactivity with the user. The user can select the admission rate they desire and can also
+# select the size of school or states they want to review.
+
+# Loads libraries for app 
 library(shiny)
 library(shinyWidgets)
 library(shinythemes)
@@ -6,10 +23,17 @@ library(gridExtra)
 library(cowplot)
 library(shinyjs)
 
+# Reads data from cleaned file
 data <- read.csv("../data/02_scorecard_clean.csv", stringsAsFactors = FALSE)
+
+# Names the states
 states <- sort(unique(data$State_Name))
+
+# Names to classify the schools
 schools <- c("Small", "Medium", "Large")
 
+
+# Load theme
 appCSS <- "
 #loading-content {
 position: absolute;
@@ -24,7 +48,7 @@ color: #FFFFFF;
 }
 "
 
-
+# User interface
 ui <- fluidPage(theme = shinytheme("yeti"),useShinyjs(),
                 inlineCSS(appCSS),
   titlePanel("Impact of School Size on Higher Education (USA)", 
@@ -33,18 +57,18 @@ ui <- fluidPage(theme = shinytheme("yeti"),useShinyjs(),
     sidebarPanel(width = 3,
                  pickerInput("state_input", 
                              label = "Select states of interest", 
-                             choices = states,
-                             multiple = TRUE,
-                             options = list(`actions-box` = TRUE),
+                             choices = states, #Select the states of interest. 
+                             multiple = TRUE, # Multiselection is possible
+                             options = list(`actions-box` = TRUE), 
                              selected = "Arizona"),
                  sliderInput("admin_input", 
                              "Select an admission rate range",
                              min = 0, max = 100, value = c(0, 100), post="%"),
-                 pickerInput("School_size", 
+                 pickerInput("School_size", # Select school size
                               label = "Select school sizes", 
                               choices = schools, 
                               selected = schools,
-                              multiple = TRUE,
+                              multiple = TRUE, # Multiselection is possible
                               options = list(`actions-box` = TRUE)),
                  htmlOutput("lines")
       
@@ -60,6 +84,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),useShinyjs(),
   )
 )
 
+# Server - Reactive inputs.
 server <- function(input, output) {
   
   output$lines <- renderText({
@@ -68,7 +93,7 @@ server <- function(input, output) {
           "Medium schools: 15,000-5,000 students", 
           "Small schools: 5,000-1 students", sep="<br>")
   })
-  
+  # Select school size
   School_size <- reactive(input$tabs)
   fill_cols <- reactive({
     if (School_size() == 'Total'){
@@ -85,16 +110,21 @@ server <- function(input, output) {
     }
   })
   
+  
   data_filtered <- reactive({
+    # Reactive input for admission rate
     if (input$admin_input[1] == 0 & input$admin_input[2] == 100) {
       data %>% 
+        # Reactive input for School size
         filter(School_size %in% input$School_size,
                State_Name %in% input$state_input)
     }
     else {
       data %>% 
+        # Reactive input for admission rate
         filter(Admissions_rate_percent < input$admin_input[2],
                Admissions_rate_percent > input$admin_input[1],
+               # Reactive input for School size
                School_size %in% input$School_size,
                State_Name %in% input$state_input)        
     }
@@ -116,7 +146,7 @@ server <- function(input, output) {
             panel.grid.minor = element_blank())
   })
   
-  ##Percent_Female_students dis plot
+  ##Percent_Female_students distribution plot
   Percent_Female_students_dis_plot <- reactive({
     data_filtered() %>% filter(!is.na(Percent_Female_students)) %>% group_by(School_size) %>%  
       ggplot(aes((x=Percent_Female_students), fill=School_size)) +
@@ -212,6 +242,7 @@ server <- function(input, output) {
     
   })
   
+  # Output of the first two plots: school count and median_10yr_wage plot
   output$row_1_T <- renderPlot({
     grid.arrange(school_plot() + theme(legend.position="none"),
                  median_10yr_earn() + theme(legend.position="none"),
@@ -219,6 +250,7 @@ server <- function(input, output) {
                  ncol=3, nrow=1,
                  widths=c(5, 5, 1))
   })
+  # Output of the next two plots: female distribution and Average entry age
   output$row_2_T <- renderPlot({
     grid.arrange(
       Percent_Female_students_dis_plot() + theme(legend.position="none"),
@@ -227,6 +259,8 @@ server <- function(input, output) {
       ncol=3, nrow=1,
       widths=c(5, 5, 1))
   })
+  
+  # Output of the next two plots: perc_fed_loans and med_fam_earnings
   output$row_3_T <- renderPlot({
     grid.arrange(
       perc_fed_loans() + theme(legend.position="none"),
@@ -236,6 +270,8 @@ server <- function(input, output) {
       widths=c(5, 5, 1))
     
   })
+  
+  # Output of table for small schools
   output$small_T <- renderTable({
     data_small <- data_filtered() %>% filter(School_size == 'Small') %>%
       select(Institution_name, Median_earnings_after_10yrs, 
@@ -255,6 +291,8 @@ server <- function(input, output) {
       ) 
     data_small
   })
+  
+  # Output of table for medium schools
   output$medium_T <- renderTable({
     data_medium <- data_filtered() %>% filter(School_size == 'Medium') %>%
       select(Institution_name, Median_earnings_after_10yrs, 
@@ -275,6 +313,8 @@ server <- function(input, output) {
     data_medium
     
   })
+  
+  # Output of table for large schools
   output$large_T <- renderTable({
     data_large <- data_filtered() %>% filter(School_size == 'Large') %>%
       select(Institution_name, Median_earnings_after_10yrs, 
@@ -296,5 +336,5 @@ server <- function(input, output) {
   })
 }
 
-
+# Shiny server
 shinyApp(ui = ui, server = server)
