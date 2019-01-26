@@ -43,6 +43,23 @@ These data are provided through federal reporting from institutions in the Unite
 
 Visit us [here](https://sedv8808.shinyapps.io/College_scorecard/)
 
+OR 
+
+Clone/download this repo.
+Go to the SRC folder
+Open and run `app.R`
+
+## Dependencies
+You must have R (recommend for latest version) installed sames as the following libraries:
+- shiny
+- shinyWidgets
+- shinythemes 
+- tidyverse
+- gridExtra
+- cowplot
+- shinyjs
+
+
 ![](images/01_Total_graphs.png)
 
 There are three interactive main features:
@@ -67,6 +84,13 @@ It was important for us to divide in school sizes because usually smaller school
 We are also aware that some students might not be willing to relocate, or would just want to relocate to a particular state, so being able to filter by state was also important. 
 
 As for admission rate, some schools are just harder to get into. And some students might aspire to get into those schools. So, they might just be interested in pursuing education there.
+
+## Structure of this repository.
+You will find 4 main folders in this repository: 
+ - Data (Raw and cleaned data)
+ - Docs (Milestone reports)
+ - Images (Screenshots that we have taken to showcase the app)
+ - SRC (All the scripts we did for running this app, including some previsualizations)
 
 
 #### Tasks
