@@ -19,11 +19,11 @@ Our feedback can be found [here](https://github.com/UBC-MDS/DSCI_532-boston-crim
 
 Our deployed Shiny App can be found [here](https://sedv8808.shinyapps.io/College_scorecard/)
 
-We are analyzing the dataset "is the "College Scorecard Data" from the US Department of Education. The College Scorecard project is designed to increase transparency and to help students and families compare individual higher education institutions. We think that reading tables can be extremely complicated. Hence, we are designing a Shiny App that users might find friendlier. This app can help people recommend schools or look schools for their own selves.
+We are analyzing the dataset is the "College Scorecard Data" from the US Department of Education. The College Scorecard project is designed to increase transparency and to help students and families compare individual higher education institutions. We think that reading tables can be extremely complicated. Hence, we are designing a Shiny App that users might find friendlier. This app can help people recommend schools or look schools for their own selves.
 
 We are just considering a few parameters for time convenience. However, it would be interesting to add all the other possible visualizations at some point in time.
 
-This project provides data visualizations for the following themes:
+This project provides data visualizations for the following:
 - School Count
 - Median Wage 10 years after graduation
 - Percentage of Females
@@ -90,7 +90,7 @@ You will find 4 main folders in this repository:
  - Data (Raw and cleaned data)
  - Docs (Milestone reports)
  - Images (Screenshots that we have taken to showcase the app)
- - SRC (All the scripts we did for running this app, including some previsualizations)
+ - SRC (All the scripts we created to run this app, including some previsualizations)
 
 
 #### Tasks
