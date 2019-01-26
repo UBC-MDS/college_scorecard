@@ -6,6 +6,8 @@ Authors: <br>
 
 ### README
 
+Look at our [Milestone 3](https://github.com/sedv8808/college_scorecard/blob/master/docs/03_milestone3.md)
+
 #### Given Reviews for other repos:
 I. We talked to Simran and Sreya about their wine app. 
 Our feedback can be found [here](https://github.com/UBC-MDS/DSCI-532-wine-data/issues/14).
@@ -69,7 +71,7 @@ As for admission rate, some schools are just harder to get into. And some studen
 
 #### Tasks
 
-Look at what we did at [Milestone 3](https://github.com/UBC-MDS/college_scorecard/tree/master/docs/03_milestone3.md):
+Look at what we did at [Milestone 3](https://github.com/sedv8808/college_scorecard/blob/master/docs/03_milestone3.md):
 
 ### Bugs
 No plots are displayed when a selection has less than 2 items.
