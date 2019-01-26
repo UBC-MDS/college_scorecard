@@ -27,13 +27,13 @@ We explained to our users that in our scenarios, we want to be able to suggest s
 Some of the graphs seem to not have had correct labels or label ticks. These were formatted for user readability.
 
 
-There are some improvements that we are considering to make:
+There are some improvements that we are considering making:
 
-- Remove the y-axis for the "school count" and just display the count on top of the bar. We don't want it to look like an ugly box. 
+- Remove the y-axis for the "school count" and just display the count on top of the bar. We don't want it to look like an eligible box. 
 
 - We found a bug: When there is only 1 school (or no schools) according to the user's selection, the distribution plots cannot be made. We would want to implement an error message when there is too little information to provide a distribution plot. Ideally, we should give back a graph with value 0 or a message that there is not enough information to display that selection.
 
-It was really good to have two teams to observe and rate our app and tell us things to improve. We heard new ideas and it was easier to see some details that made the app less user friendly. We think this helped us improve our app.
+It was really good to have two teams to observe and rate our app so we could understand what we needed to improve. We heard new ideas and it was easier to see some details that made the app less user friendly. We think this helped us improve our app.
 
 Design improvements that were implemented thanks to the received feedback:
 * The scale for percentage values has been changed
