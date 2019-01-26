@@ -6,7 +6,7 @@ Authors: <br>
 
 ### README
 
-Look at our [Milestone 3](https://github.com/sedv8808/college_scorecard/blob/master/docs/03_milestone3.md)
+Look at our [Milestone 3](https://github.com/UBC-MDS/college_scorecard/blob/master/docs/03_milestone3.md)
 
 #### Given Reviews for other repos:
 I. We talked to Simran and Sreya about their wine app. 
@@ -95,7 +95,7 @@ You will find 4 main folders in this repository:
 
 #### Tasks
 
-Look at what we did at [Milestone 3](https://github.com/sedv8808/college_scorecard/blob/master/docs/03_milestone3.md):
+Look at what we did at [Milestone 3](https://github.com/UBC-MDS/college_scorecard/blob/master/docs/03_milestone3.md):
 
 ### Bugs
 No plots are displayed when a selection has less than 2 items.
