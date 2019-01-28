@@ -32,7 +32,6 @@ states <- sort(unique(data$State_Name))
 # Names to classify the schools
 schools <- c("Small", "Medium", "Large")
 
-
 # Load theme
 appCSS <- "
 #loading-content {
@@ -110,7 +109,6 @@ server <- function(input, output) {
     }
   })
   
-  
   data_filtered <- reactive({
     # Reactive input for admission rate
     if (input$admin_input[1] == 0 & input$admin_input[2] == 100) {
@@ -130,14 +128,23 @@ server <- function(input, output) {
     }
   })
   
+  count_schools <- reactive({
+    nrow(data_filtered())
+  })
+  observe(print(count_schools()))
+  
   # overall number of schools
   school_plot <- reactive({
     data_filtered() %>% group_by(School_size) %>% summarise(count = n()) %>% 
       arrange(count, desc(count)) %>% 
       ggplot(aes(x=School_size, y=count, fill=School_size)) +
       geom_bar(colour="black", stat="identity", alpha=.3) +
+      geom_text(aes(label=count), position=position_dodge(width=1), vjust=-0.25, size=5) +
       theme_bw() +
-      theme(text=element_text(size=14)) +
+      theme(text=element_text(size=14),
+            axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank()) +
       scale_fill_manual(values=fill_cols()) +
       ggtitle("Number of Schools by Size") +
       xlab("School Size") + 
@@ -146,7 +153,7 @@ server <- function(input, output) {
             panel.grid.minor = element_blank())
   })
   
-  ##Percent_Female_students distribution plot
+  #cPercent_Female_students distribution plot
   Percent_Female_students_dis_plot <- reactive({
     data_filtered() %>% filter(!is.na(Percent_Female_students)) %>% group_by(School_size) %>%  
       ggplot(aes((x=Percent_Female_students), fill=School_size)) +
@@ -244,31 +251,63 @@ server <- function(input, output) {
   
   # Output of the first two plots: school count and median_10yr_wage plot
   output$row_1_T <- renderPlot({
-    grid.arrange(school_plot() + theme(legend.position="none"),
-                 median_10yr_earn() + theme(legend.position="none"),
-                 get_legend(school_plot() + guides(fill = guide_legend(title = "School Size"))),
-                 ncol=3, nrow=1,
-                 widths=c(5, 5, 1))
+   if (count_schools() == 0) {
+      validate(
+        need(count_schools() != 0, "There are no schools returned for your filtering criteria.
+                                    Please increase your filtering criteria.")
+      )      
+    }
+    if (count_schools() != 1) {
+      grid.arrange(school_plot() + theme(legend.position="none"),
+                   median_10yr_earn() + theme(legend.position="none"),
+                   get_legend(school_plot() + guides(fill = guide_legend(title = "School Size"))),
+                   ncol=3, nrow=1,
+                   widths=c(5, 5, 1))
+    }
+    else {
+      grid.arrange(school_plot() + theme(legend.position="none"),
+                   widths=c(7,6))
+    }
   })
   # Output of the next two plots: female distribution and Average entry age
   output$row_2_T <- renderPlot({
-    grid.arrange(
-      Percent_Female_students_dis_plot() + theme(legend.position="none"),
-      Mean_entry_age_plot() + theme(legend.position="none"),
-      get_legend(school_plot() + guides(fill = guide_legend(title = "School Size"))),
-      ncol=3, nrow=1,
-      widths=c(5, 5, 1))
+    if (count_schools() == 0) {
+      validate(
+        need(count_schools() != 0, "")
+      )
+    }
+    if (count_schools() == 1) {
+      validate(
+        need(count_schools() != 1, "Additional graphs cannot be displayed when there is only one school selected. 
+                                    Please increase your filtering criteria")
+      )
+    }
+    else {
+      grid.arrange(
+        Percent_Female_students_dis_plot() + theme(legend.position="none"),
+        Mean_entry_age_plot() + theme(legend.position="none"),
+        get_legend(school_plot() + guides(fill = guide_legend(title = "School Size"))),
+        ncol=3, nrow=1,
+        widths=c(5, 5, 1))
+    }
+    
   })
   
   # Output of the next two plots: perc_fed_loans and med_fam_earnings
   output$row_3_T <- renderPlot({
-    grid.arrange(
-      perc_fed_loans() + theme(legend.position="none"),
-      med_fam_earn() + theme(legend.position="none"),
-      get_legend(school_plot() + guides(fill = guide_legend(title = "School Size"))),
-      ncol=3, nrow=1,
-      widths=c(5, 5, 1))
-    
+    if (count_schools() == 0) {
+    validate(
+      need(count_schools() != 0, "")
+    )      
+    }
+    if (count_schools() != 1) {
+      grid.arrange(
+        perc_fed_loans() + theme(legend.position="none"),
+        med_fam_earn() + theme(legend.position="none"),
+        get_legend(school_plot() + guides(fill = guide_legend(title = "School Size"))),
+        ncol=3, nrow=1,
+        widths=c(5, 5, 1))
+    }
   })
   
   # Output of table for small schools
@@ -284,6 +323,11 @@ server <- function(input, output) {
              "Mean entry age" = Mean_entry_age,
              "Percent students with loans" = Percent_students_with_loans,
              "Median family income" = Median_family_income
+      )
+    validate(
+      need(nrow(data_filtered() %>% filter(School_size == 'Small')) > 0, 
+                                "There are no small schools returned for your filtering criteria.
+                                 Please increase your filtering criteria.")
       )
     validate(
       need(nrow(data_small) < 150, "There are too many values to display. 
@@ -307,6 +351,11 @@ server <- function(input, output) {
              "Median family income" = Median_family_income
              )
     validate(
+      need(nrow(data_filtered() %>% filter(School_size == 'Medium')) > 0, 
+                                "There are no medium schools returned for your filtering criteria.
+                                 Please increase your filtering criteria.")
+    )
+    validate(
       need(nrow(data_medium) < 150, "There are too many values to display. 
            Please increase your filtering criteria to return fewer than 150 medium sized schools")
     ) 
@@ -327,6 +376,11 @@ server <- function(input, output) {
              "Mean entry age" = Mean_entry_age,
              "Percent students with loans" = Percent_students_with_loans,
              "Median family income" = Median_family_income
+      )
+      validate(
+        need(nrow(data_filtered() %>% filter(School_size == 'Large')) > 0, 
+                                    "There are no large schools returned for your filtering criteria.
+                                    Please increase your filtering criteria.")
       )
      validate(
       need(nrow(data_large) < 150, "There are too many values to display. 
