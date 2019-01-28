@@ -59,7 +59,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),useShinyjs(),
                              choices = states, #Select the states of interest. 
                              multiple = TRUE, # Multiselection is possible
                              options = list(`actions-box` = TRUE), 
-                             selected = "Arizona"),
+                             selected = "California"),
                  sliderInput("admin_input", 
                              "Select an admission rate range",
                              min = 0, max = 100, value = c(0, 100), post="%"),

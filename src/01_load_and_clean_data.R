@@ -75,6 +75,8 @@ main <- function(){
                        Median_earnings_after_10yrs = round(Median_earnings_after_10yrs,0)
                        ) %>%
                 select(-ADM_RATE)
+  # omit rows that do not have values
+  data_all <- na.omit(data_all)
   write_csv(data_all, "data/02_scorecard_clean.csv")
 }
 
