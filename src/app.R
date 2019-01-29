@@ -251,6 +251,7 @@ server <- function(input, output) {
   # Output of the first two plots: school count and median_10yr_wage plot
   output$row_1_T <- renderPlot({
    if (count_schools() == 0) {
+     # M4. Targets BUG of not enough schools selected
       validate(
         need(count_schools() != 0, "There are no schools returned for your filtering criteria.
                                     Please increase your filtering criteria.")
@@ -271,11 +272,13 @@ server <- function(input, output) {
   # Output of the next two plots: female distribution and Average entry age
   output$row_2_T <- renderPlot({
     if (count_schools() == 0) {
+      # M4. Targets BUG of not enough schools selected
       validate(
         need(count_schools() != 0, "")
       )
     }
     if (count_schools() == 1) {
+      # M4. Targets BUG of not enough schools selected
       validate(
         need(count_schools() != 1, "Additional graphs cannot be displayed when there is only one school selected. 
                                     Please increase your filtering criteria")
@@ -295,6 +298,7 @@ server <- function(input, output) {
   # Output of the next two plots: perc_fed_loans and med_fam_earnings
   output$row_3_T <- renderPlot({
     if (count_schools() == 0) {
+    # M4. Targets BUG of not enough schools selected
     validate(
       need(count_schools() != 0, "")
     )      
@@ -323,11 +327,13 @@ server <- function(input, output) {
              "Percent students with loans" = Percent_students_with_loans,
              "Median family income" = Median_family_income
       )
+    # M4. Targets BUG of not enough schools selected
     validate(
       need(nrow(data_filtered() %>% filter(School_size == 'Small')) > 0, 
                                 "There are no small schools returned for your filtering criteria.
                                  Please increase your filtering criteria.")
       )
+    # M4. Targets BUG of not enough schools selected
     validate(
       need(nrow(data_small) < 150, "There are too many values to display. 
            Please increase your filtering criteria to return fewer than 150 small sized schools")
