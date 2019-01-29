@@ -13,23 +13,23 @@ We decided to implement a few changes on our app based on previous received feed
 The problem we faced was that under certain selections, there was not enough information to produce a plot. For example, when we had all filters de-selected, a red letter error message would appear on the server. Our users said this message was unappealing and it felt violent. Here are some screenshots to showcase our changes:
 
 
-[Before](images/09_Error_message.png)
+![Before](../images/09_Error_message.png)
 
 
-[After](images/10_Error_message_c.png)
+![After](../images/10_Error_message_c.png)
 
 We also had error messages when the filtered information would only throw one data point. Most of our plots are distributions. So, if the selected data is just one observation, we couldn't do any plots and we had 5 empty uninformative squares. Now, we tell the user that the information just has one school selected and the other plots can't be done for these reasons.
 
-[Before](images/11_One_observation.png)
+![Before](../images/11_One_observation.png)
 
 
-[After](images/12_One_observation_c.png)
+![After](../images/12_One_observation_c.png)
 
 Furthermore, when there were not enough selections, when we visited the tables' tabs, they were just empty so, it was confusing for the users to know if the page was loading or if there was nothing to be shown. We just added a legend to let the user know that there are were no data points to be shown in their selection
 
-[Before](images/13_Table_empty.png)
+![Before](../images/13_Table_empty.png)
 
-[After](images/14_Table_corrected.png)
+![After](../images/14_Table_corrected.png)
 
 In our original data there were a lot of schools that did not have any information other than the name of the institution. At first we were considering leaving these points for the school counts' graph. However, we felt that this was inconsistent with our graphs: The counts graph was informing how many schools in total there where and the other graphs where just informing about a smaller subset of what we were reporting. We think the graphs of the distribution should only reflect the information of the schools we say are being counted. To be consistent with this selection, we also filtered our tables in order to just have the reported points. 
 
