@@ -6,19 +6,14 @@ Authors: <br>
 
 ### README
 
-Look at our [Milestone 3](https://github.com/UBC-MDS/college_scorecard/blob/master/docs/03_milestone3.md)
-
-#### Given Reviews for other repos:
-I. We talked to Simran and Sreya about their wine app. 
-Our feedback can be found [here](https://github.com/UBC-MDS/DSCI-532-wine-data/issues/14).
-
-II. We also talked to Hayley and Tony about their Boston crime Shiny app.
-Our feedback can be found [here](https://github.com/UBC-MDS/DSCI_532-boston-crime-rate/issues/27).
+Look at our [Milestone 4](https://github.com/UBC-MDS/college_scorecard/blob/master/docs/04_milestone4.md)
 
 #### College Scorecard
 
 Our deployed Shiny App can be found [here](https://sedv8808.shinyapps.io/College_scorecard/)
 
+
+#### Our App
 We are analyzing the dataset is the "College Scorecard Data" from the US Department of Education. The College Scorecard project is designed to increase transparency and to help students and families compare individual higher education institutions. We think that reading tables can be extremely complicated. Hence, we are designing a Shiny App that users might find friendlier. This app can help people recommend schools or look schools for their own selves.
 
 We are just considering a few parameters for time convenience. However, it would be interesting to add all the other possible visualizations at some point in time.
@@ -38,6 +33,8 @@ These data are provided through federal reporting from institutions in the Unite
 [College Scorecard](https://github.ubc.ca/MDS-2018-19/DSCI_532_viz-2_students/tree/master/release/milestone1/data/scorecard)
 
 [Dictionary](https://github.ubc.ca/MDS-2018-19/DSCI_532_viz-2_students/blob/master/release/milestone1/data/scorecard/dictionary.csv)
+
+We are only using those schools for which the data is complete. All schools that had empty values were removed.
 
 ## Usage
 
@@ -85,6 +82,8 @@ We are also aware that some students might not be willing to relocate, or would 
 
 As for admission rate, some schools are just harder to get into. And some students might aspire to get into those schools. So, they might just be interested in pursuing education there.
 
+
+
 ## Structure of this repository.
 You will find 4 main folders in this repository: 
  - Data (Raw and cleaned data)
@@ -95,11 +94,11 @@ You will find 4 main folders in this repository:
 
 #### Tasks
 
-Look at what we did at [Milestone 3](https://github.com/UBC-MDS/college_scorecard/blob/master/docs/03_milestone3.md):
+Look at what we did at [Milestone 4](https://github.com/UBC-MDS/college_scorecard/blob/master/docs/04_milestone4.md):
 
-### Bugs
-No plots are displayed when a selection has less than 2 items.
 
+
+[Milestone 4](https://github.com/UBC-MDS/college_scorecard/releases/tag/V4.0)
 [Milestone 3](https://github.com/UBC-MDS/college_scorecard/releases/tag/V3.0)
 [Milestone 2](https://github.com/UBC-MDS/college_scorecard/releases/tag/V2.0)
 [Proposal Release](https://github.com/UBC-MDS/college_scorecard/releases/tag/V1.0)
