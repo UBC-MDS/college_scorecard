@@ -72,6 +72,8 @@ ui <- fluidPage(theme = shinytheme("yeti"),useShinyjs(),
                  htmlOutput("lines")
       
     ),
+    
+    # Main panel
     mainPanel(width = 8,
       tabsetPanel( id = 'tabs', selected = 'Total',
                    tabPanel("Total", value = 'Total', plotOutput("row_1_T"), plotOutput("row_2_T"), 
@@ -136,15 +138,15 @@ server <- function(input, output) {
   school_plot <- reactive({
     data_filtered() %>% group_by(School_size) %>% summarise(count = n()) %>% 
       arrange(count, desc(count)) %>% 
-      ggplot(aes(x=School_size, y=count, fill=School_size)) +
-      geom_bar(colour="black", stat="identity", alpha=.3) +
-      geom_text(aes(label=count), position=position_dodge(width=1), vjust=-0.25, size=5) +
+      ggplot(aes(x = School_size, y = count, fill = School_size)) +
+      geom_bar(colour = "black", stat = "identity", alpha = 0.3) +
+      geom_text(aes(label = count), position = position_dodge(width=1), vjust = -0.25, size = 5) +
       theme_bw() +
-      theme(text=element_text(size=14),
-            axis.title.y=element_blank(),
-            axis.text.y=element_blank(),
-            axis.ticks.y=element_blank()) +
-      scale_fill_manual(values=fill_cols()) +
+      theme(text = element_text(size = 14),
+            axis.title.y = element_blank(),
+            axis.text.y = element_blank(),
+            axis.ticks.y = element_blank()) +
+      scale_fill_manual(values = fill_cols()) +
       ggtitle("Number of Schools by Size") +
       xlab("School Size") + 
       ylab("Count") +
@@ -155,14 +157,14 @@ server <- function(input, output) {
   #cPercent_Female_students distribution plot
   Percent_Female_students_dis_plot <- reactive({
     data_filtered() %>% filter(!is.na(Percent_Female_students)) %>% group_by(School_size) %>%  
-      ggplot(aes((x=Percent_Female_students), fill=School_size)) +
-      geom_density(alpha=.3) +
-      scale_fill_manual(values=fill_cols()) +
+      ggplot(aes((x = Percent_Female_students), fill = School_size)) +
+      geom_density(alpha = .3) +
+      scale_fill_manual(values = fill_cols()) +
       theme_bw() +
-      theme(text=element_text(size=14),
-            axis.title.y=element_blank(),
-            axis.text.y=element_blank(),
-            axis.ticks.y=element_blank()) +
+      theme(text = element_text(size = 14),
+            axis.title.y = element_blank(),
+            axis.text.y = element_blank(),
+            axis.ticks.y = element_blank()) +
       ggtitle("Distirubtion of the Percent of Female Students") +
       xlab("Percentage of students (%)") + 
       ylab("Density") +
@@ -174,14 +176,14 @@ server <- function(input, output) {
   # Median Wage after 10 Years
   median_10yr_earn <- reactive({
     data_filtered() %>% filter(!is.na(Median_earnings_after_10yrs)) %>% group_by(School_size) %>% 
-      ggplot(aes(x=Median_earnings_after_10yrs, fill=School_size)) + 
-      geom_density(alpha=.3) +
+      ggplot(aes(x = Median_earnings_after_10yrs, fill = School_size)) + 
+      geom_density(alpha = 0.3) +
       theme_bw() + 
-      theme(text=element_text(size=14),
-            axis.title.y=element_blank(),
-            axis.text.y=element_blank(),
-            axis.ticks.y=element_blank()) +
-      scale_fill_manual(values=fill_cols()) +
+      theme(text = element_text(size = 14),
+            axis.title.y = element_blank(),
+            axis.text.y = element_blank(),
+            axis.ticks.y = element_blank()) +
+      scale_fill_manual(values = fill_cols()) +
       ggtitle("Distirbution of Median Earnings 10yrs after Graduation") +
       xlab("Earnings ($)") +
       ylab("Density") +
@@ -193,14 +195,14 @@ server <- function(input, output) {
   # Entry Age Plot
   Mean_entry_age_plot <- reactive({
     data_filtered() %>% filter(!is.na(Mean_entry_age)) %>% group_by(School_size) %>%
-      ggplot(aes(x=Mean_entry_age, fill=School_size)) + geom_density(alpha=.3) +
+      ggplot(aes(x = Mean_entry_age, fill = School_size)) + geom_density(alpha = 0.3) +
       theme_bw() + 
-      theme(text=element_text(size=14),
-            axis.title.y=element_blank(),
-            axis.text.y=element_blank(),
-            axis.ticks.y=element_blank()) +
-      scale_fill_manual(values=fill_cols()) +
-      theme(legend.position="none") +
+      theme(text = element_text(size = 14),
+            axis.title.y = element_blank(),
+            axis.text.y = element_blank(),
+            axis.ticks.y = element_blank()) +
+      scale_fill_manual(values = fill_cols()) +
+      theme(legend.position = "none") +
       ggtitle("Distribution of Entrance Age") +
       xlab("Age") +
       ylab("Density") +
@@ -212,14 +214,14 @@ server <- function(input, output) {
   # Perceived Fed Loans
   perc_fed_loans <- reactive({
     data_filtered() %>% filter(!is.na(Percent_students_with_loans)) %>% group_by(School_size) %>%
-      ggplot(aes(x=Percent_students_with_loans, fill=School_size)) + geom_density(alpha=.3) +
+      ggplot(aes(x = Percent_students_with_loans, fill=School_size)) + geom_density(alpha = 0.3) +
       theme_bw() + 
-      theme(text=element_text(size=14),
-            axis.title.y=element_blank(),
-            axis.text.y=element_blank(),
-            axis.ticks.y=element_blank()) +
-      scale_fill_manual(values=fill_cols()) +
-      theme(legend.position="none") +
+      theme(text = element_text(size=14),
+            axis.title.y = element_blank(),
+            axis.text.y = element_blank(),
+            axis.ticks.y = element_blank()) +
+      scale_fill_manual(values = fill_cols()) +
+      theme(legend.position = "none") +
       ggtitle("Distribution of Students Receiving Financial Aid (%)") +
       xlab("Financial aid (%)") +
       ylab("Density") +
@@ -231,14 +233,14 @@ server <- function(input, output) {
   # Med family income 
   med_fam_earn <- reactive({
     data_filtered() %>% filter(!is.na(Median_family_income)) %>% group_by(School_size) %>%
-      ggplot(aes(x=Median_family_income, fill=School_size)) + geom_density(alpha=.3) +
+      ggplot(aes(x = Median_family_income, fill=School_size)) + geom_density(alpha = 0.3) +
       theme_bw() + 
-      theme(text=element_text(size=14),
-            axis.title.y=element_blank(),
-            axis.text.y=element_blank(),
-            axis.ticks.y=element_blank()) +
-      scale_fill_manual(values=fill_cols()) +
-      theme(legend.position="none") +
+      theme(text = element_text(size=14),
+            axis.title.y = element_blank(),
+            axis.text.y = element_blank(),
+            axis.ticks.y = element_blank()) +
+      scale_fill_manual(values = fill_cols()) +
+      theme(legend.position = "none") +
       ggtitle("Distribution of Median Family Earnings") +
       xlab("Family earnings ($)") +
       ylab("Density") +
@@ -258,15 +260,15 @@ server <- function(input, output) {
       )      
     }
     if (count_schools() != 1) {
-      grid.arrange(school_plot() + theme(legend.position="none"),
-                   median_10yr_earn() + theme(legend.position="none"),
+      grid.arrange(school_plot() + theme(legend.position = "none"),
+                   median_10yr_earn() + theme(legend.position = "none"),
                    get_legend(school_plot() + guides(fill = guide_legend(title = "School Size"))),
-                   ncol=3, nrow=1,
-                   widths=c(5, 5, 1))
+                   ncol = 3, nrow = 1,
+                   widths = c(5, 5, 1))
     }
     else {
-      grid.arrange(school_plot() + theme(legend.position="none"),
-                   widths=c(7,6))
+      grid.arrange(school_plot() + theme(legend.position = "none"),
+                   widths = c(7,6))
     }
   })
   # Output of the next two plots: female distribution and Average entry age
@@ -286,11 +288,11 @@ server <- function(input, output) {
     }
     else {
       grid.arrange(
-        Percent_Female_students_dis_plot() + theme(legend.position="none"),
-        Mean_entry_age_plot() + theme(legend.position="none"),
+        Percent_Female_students_dis_plot() + theme(legend.position = "none"),
+        Mean_entry_age_plot() + theme(legend.position = "none"),
         get_legend(school_plot() + guides(fill = guide_legend(title = "School Size"))),
-        ncol=3, nrow=1,
-        widths=c(5, 5, 1))
+        ncol = 3, nrow = 1,
+        widths = c(5, 5, 1))
     }
     
   })
@@ -305,11 +307,11 @@ server <- function(input, output) {
     }
     if (count_schools() != 1) {
       grid.arrange(
-        perc_fed_loans() + theme(legend.position="none"),
+        perc_fed_loans() + theme(legend.position = "none"),
         med_fam_earn() + theme(legend.position="none"),
         get_legend(school_plot() + guides(fill = guide_legend(title = "School Size"))),
-        ncol=3, nrow=1,
-        widths=c(5, 5, 1))
+        ncol = 3, nrow = 1,
+        widths = c(5, 5, 1))
     }
   })
   
