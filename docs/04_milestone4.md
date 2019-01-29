@@ -33,6 +33,10 @@ Furthermore, when there were not enough selections, when we visited the tables' 
 
 In our original data there were a lot of schools that did not have any information other than the name of the institution. At first we were considering leaving these points for the school counts' graph. However, we felt that this was inconsistent with our graphs: The counts graph was informing how many schools in total there where and the other graphs where just informing about a smaller subset of what we were reporting. We think the graphs of the distribution should only reflect the information of the schools we say are being counted. To be consistent with this selection, we also filtered our tables in order to just have the reported points. 
 
+Other changes: We added the `number of counted schools` on top of the graph of "School count". We did this so that the user knows how many schools their selection chose and understands the density plots as a result of that number of schools.
+
+
+
 ### Changes if we were to made the app from scratch
 
 If we started the app from scratch, we would have wanted to have some more feedback from prospective users: Maybe we would have reviewed the dataset in more detail. Then, interview a possible real client, explain them what the dataset was about and have them given us some real input on what they would need the app to inform them about and on the hows. Designing the app can be fun. However, we are not experts in the field of education (as counselours or ministries of education). We feel that having real input from the experts on what they want and what they need would give a great guiding.  We would also have created more functions at coding. This is some new expertise we learned from this experience. 

@@ -88,9 +88,9 @@ server <- function(input, output) {
   
   output$lines <- renderText({
     paste( 
-          "Large schools: 15,000+ students", 
-          "Medium schools: 15,000-5,000 students", 
-          "Small schools: 5,000-1 students", sep="<br>")
+          "Large schools: 15,000 + students", 
+          "Medium schools: 5,000 - 15,000 students", 
+          "Small schools: 1 - 5,000 students", sep="<br>")
   })
   # Select school size
   School_size <- reactive(input$tabs)
