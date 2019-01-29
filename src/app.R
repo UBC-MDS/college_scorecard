@@ -131,7 +131,6 @@ server <- function(input, output) {
   count_schools <- reactive({
     nrow(data_filtered())
   })
-  observe(print(count_schools()))
   
   # overall number of schools
   school_plot <- reactive({
